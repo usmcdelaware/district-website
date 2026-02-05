@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #0b0f17;
+  color: #e6eaf2;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.site-header {
+  border-bottom: 1px solid #222;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav a {
+  color: #a9b3c7;
+  margin-left: 12px;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: white;
+}
+
+.hero {
+  padding: 60px 0;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #a9b3c7;
+  font-size: 12px;
+}
+
+.section {
+  padding: 40px 0;
+}
+
+.section.alt {
+  background: #121a2a;
+}
+
+button {
+  padding: 10px 14px;
+  cursor: pointer;
+}
