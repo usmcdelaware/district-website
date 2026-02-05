@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sagtikos District Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      /* Scouts BSA color palette you’re using */
+      --bg: #D6CEBD;
+      --primary: #003F87;
+      --accent: #CE1126;
+      --text: #243E2C;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 1rem;
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .calendar-container {
+      padding: 0;
+      height: calc(100vh - 72px);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Sagtikos District Calendar</h1>
+  </header>
+
+  <div class="calendar-container">
+    <iframe
+      src="https://www.sccbsa.org/calendar/district/572/Sagtikos"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </div>
+
+</body>
+</html>
