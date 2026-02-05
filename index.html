@@ -9,54 +9,78 @@
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <strong class="brand">My Site</strong>
-
-      <nav class="nav">
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-      </nav>
-    </div>
-  </header>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">Sagtikos District Program</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="resources.html">Resources</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
 
   <main>
-    <section class="hero">
-      <div class="container">
-        <p class="kicker">Welcome</p>
-        <h1>Hello, GitHub Pages 👋</h1>
-        <p class="subhead">
-          This page is being built locally in VS Code and will be deployed as a static site.
-        </p>
-      </div>
-    </section>
+  <section class="hero">
+    <div class="container">
+      <p class="kicker">Sagtikos District</p>
+      <h1>District Program Hub</h1>
+      <p class="subhead">
+        Upcoming events, calendar, resources, and feedback dashboards — in one place.
+      </p>
 
-    <section id="projects" class="section">
-      <div class="container">
-        <h2>Projects</h2>
-        <p>This is where links to your work will go.</p>
+      <div class="hero-actions">
+        <a class="button accent" href="calendar.html">View Calendar</a>
+        <a class="button ghost" href="dashboard.html">Feedback Dashboard</a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="about" class="section alt">
-      <div class="container">
-        <h2>About</h2>
-        <p>
-          Edit this text to describe what this site is for.
-          Everything here is just HTML.
-        </p>
+  <section class="section">
+    <div class="container">
+      <h2>Quick Links</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Upcoming Events</h3>
+          <p>Flyers, registration links, and event details.</p>
+          <a class="link" href="calendar.html">Go to calendar →</a>
+        </article>
 
-        <button id="helloBtn">Click me</button>
-        <p id="helloOut"></p>
+        <article class="card">
+          <h3>Resources</h3>
+          <p>Leader guides, templates, agendas, and program materials.</p>
+          <a class="link" href="resources.html">Browse resources →</a>
+        </article>
+
+        <article class="card">
+          <h3>Feedback</h3>
+          <p>Public summary of event surveys and improvement trends.</p>
+          <a class="link" href="dashboard.html">View dashboard →</a>
+        </article>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <h2>About This Site</h2>
+      <p class="muted">
+        This is a simple, fast district program homepage hosted on GitHub Pages.
+        It’s designed to stay easy to maintain while still showing live data where helpful.
+      </p>
+    </div>
+  </section>
+</main>
+
 
   <footer class="site-footer">
-    <div class="container">
-      <p>© <span id="year"></span></p>
-    </div>
-  </footer>
+  <div class="container footer-inner">
+    <p>© <span id="year"></span> Sagtikos District</p>
+    <p>Scouts BSA • Suffolk County Council</p>
+  </div>
+</footer>
 
   <script src="script.js"></script>
 </body>
