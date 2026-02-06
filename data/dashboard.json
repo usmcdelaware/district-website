@@ -1,0 +1,68 @@
+{
+  "last_updated": "2026-02-05",
+  "views": {
+    "all": {
+      "latest": {
+        "kpi": {
+          "responses": 142,
+          "scopeLabel": "All events",
+          "overall_avg": 4.4,
+          "return_avg": 4.6,
+          "top_improvement": "Serving line speed"
+        },
+        "satisfaction": { "labels": ["1","2","3","4","5"], "counts": [2, 6, 18, 56, 60] },
+        "return_likelihood": { "labels": ["1","2","3","4","5"], "counts": [1, 4, 12, 45, 80] },
+        "ssc": {
+          "labels": ["Meal variety","Portion sizes","Taste/seasoning","Serving line speed","Dietary accommodations","Communication/menu clarity","Value for cost"],
+          "series": [
+            { "label": "Start", "data": [10, 8, 7, 18, 6, 9, 5] },
+            { "label": "Stop", "data": [2, 3, 4, 12, 1, 2, 3] },
+            { "label": "Continue", "data": [20, 22, 25, 9, 18, 16, 21] }
+          ]
+        },
+        "actions": [
+          "Pilot a second serving line during peak times.",
+          "Post the menu board at check-in and dining hall entrance.",
+          "Add a clear dietary accommodations workflow for units.",
+          "Standardize portioning tools for consistent servings."
+        ]
+      },
+      "12m": { "kpi": { "responses": 410, "scopeLabel": "All events (12 months)", "overall_avg": 4.3, "return_avg": 4.5, "top_improvement": "Communication / menu clarity" },
+        "satisfaction": { "labels": ["1","2","3","4","5"], "counts": [6, 18, 60, 160, 166] },
+        "return_likelihood": { "labels": ["1","2","3","4","5"], "counts": [4, 10, 40, 140, 216] },
+        "ssc": { "labels": ["Meal variety","Portion sizes","Taste/seasoning","Serving line speed","Dietary accommodations","Communication/menu clarity","Value for cost"],
+          "series": [
+            { "label": "Start", "data": [22, 18, 16, 34, 14, 28, 12] },
+            { "label": "Stop", "data": [6, 8, 7, 20, 4, 7, 9] },
+            { "label": "Continue", "data": [44, 50, 55, 24, 36, 38, 48] }
+          ]
+        },
+        "actions": ["Standardize a pre-event comms timeline (T-30, T-14, T-7).", "Run a “speed-of-service” drill at staff setup night."]
+      },
+      "all": { "kpi": { "responses": 410, "scopeLabel": "All time", "overall_avg": 4.3, "return_avg": 4.5, "top_improvement": "Communication / menu clarity" },
+        "satisfaction": { "labels": ["1","2","3","4","5"], "counts": [6, 18, 60, 160, 166] },
+        "return_likelihood": { "labels": ["1","2","3","4","5"], "counts": [4, 10, 40, 140, 216] },
+        "ssc": { "labels": ["Meal variety","Portion sizes","Taste/seasoning","Serving line speed","Dietary accommodations","Communication/menu clarity","Value for cost"],
+          "series": [
+            { "label": "Start", "data": [22, 18, 16, 34, 14, 28, 12] },
+            { "label": "Stop", "data": [6, 8, 7, 20, 4, 7, 9] },
+            { "label": "Continue", "data": [44, 50, 55, 24, 36, 38, 48] }
+          ]
+        },
+        "actions": ["Keep a single master “lessons learned” list and tag items by committee area (Program, Food, Logistics, Safety)."]
+      }
+    },
+    "camporee": { "latest": { "kpi": { "responses": 182, "scopeLabel": "Camporee", "overall_avg": 4.5, "return_avg": 4.7, "top_improvement": "Serving line speed" },
+      "satisfaction": { "labels": ["1","2","3","4","5"], "counts": [1, 3, 10, 66, 102] },
+      "return_likelihood": { "labels": ["1","2","3","4","5"], "counts": [1, 1, 7, 40, 133] },
+      "ssc": { "labels": ["Meal variety","Portion sizes","Taste/seasoning","Serving line speed","Dietary accommodations","Communication/menu clarity","Value for cost"],
+        "series": [
+          { "label": "Start", "data": [6, 5, 4, 14, 4, 6, 3] },
+          { "label": "Stop", "data": [1, 2, 2, 9, 1, 1, 2] },
+          { "label": "Continue", "data": [14, 16, 18, 7, 12, 10, 15] }
+        ]
+      },
+      "actions": ["Add a second serving point for drinks/condiments to reduce bottleneck."]
+    } }
+  }
+}
