@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>District Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --sand:#D6CEBD;
+      --red:#CE1126;
+      --green:#243E2C;
+      --blue:#003F87;
+      --gray:#515354;
+
+      --card:#ffffff;
+      --ink:#0f172a;
+      --muted:#475569;
+      --ring: rgba(0,63,135,.18);
+      --radius:16px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: linear-gradient(180deg, var(--sand), #f6f4ef);
+      color: var(--ink);
+    }
+
+    /* top bar */
+    header{
+      background: var(--blue);
+      color:white;
+      padding: 18px 18px;
+      border-bottom: 4px solid var(--red);
+    }
+    .wrap{ max-width: 1100px; margin: 0 auto; }
+    .toprow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    h1{
+      margin:0;
+      font-size: 1.35rem;
+      letter-spacing: .2px;
+    }
+    .sub{
+      margin: 4px 0 0;
+      color: rgba(255,255,255,.85);
+      font-size: .95rem;
+    }
+    .pillrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .pill{
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.22);
+      color: white;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: .85rem;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      white-space:nowrap;
+    }
+    .dot{
+      width:9px; height:9px; border-radius:50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,.18);
+    }
+
+    main{ padding: 22px 18px 40px; }
+
+    /* cards */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(2,6,23,.08);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 24px rgba(2,6,23,.06);
+      padding: 14px;
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0 0 8px;
+      font-size: 1.05rem;
+      color: var(--green);
+    }
+    .muted{ color: var(--muted); font-size:.92rem; margin:0; }
+
+    /* stat tiles */
+    .stat{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .big{
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+    .label{ font-size: .9rem; color: var(--muted); margin-top:6px; }
+    .badge{
+      font-size: .8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(36,62,44,.10);
+      color: var(--green);
+      border: 1px solid rgba(36,62,44,.18);
+      white-space:nowrap;
+    }
+
+    /* chart cards */
+    .chartwrap{
+      height: 280px;
+      margin-top: 10px;
+    }
+    canvas{ width: 100% !important; height: 100% !important; }
+
+    /* layout spans */
+    .span-3{ grid-column: span 3; }
+    .span-4{ grid-column: span 4; }
+    .span-6{ grid-column: span 6; }
+    .span-12{ grid-column: span 12; }
+
+    @media (max-width: 980px){
+      .span-3,.span-4{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .span-3,.span-4,.span-6{ grid-column: span 12; }
+      .chartwrap{ height: 260px; }
+    }
+
+    /* controls */
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    select, button{
+      border-radius: 12px;
+      border: 1px solid rgba(2,6,23,.12);
+      padding: 10px 12px;
+      background: white;
+      font-size: .95rem;
+      outline: none;
+    }
+    select:focus, button:focus{
+      box-shadow: 0 0 0 4px var(--ring);
+      border-color: rgba(0,63,135,.35);
+    }
+    button{
+      background: var(--green);
+      color:white;
+      border-color: rgba(0,0,0,.05);
+      cursor:pointer;
+    }
+    button:hover{ filter: brightness(1.05); }
+    .link{
+      color: rgba(255,255,255,.92);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-size: .9rem;
+    }
+
+    .error{
+      border-left: 5px solid var(--red);
+      background: rgba(206,17,38,.08);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-top: 12px;
+      color: #7f1d1d;
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="toprow">
+      <div>
+        <h1>District Dashboard</h1>
+        <p class="sub">Survey insights, attendance trends, and action items — all in one place.</p>
+      </div>
+
+      <div class="pillrow">
+        <div class="pill"><span class="dot"></span><span id="statusText">Data: not loaded</span></div>
+        <div class="pill"><strong>Last updated:</strong> <span id="lastUpdated">—</span></div>
+        <a class="link" href="calendar.html">View Calendar</a>
+      </div>
+    </div>
+
+    <div class="controls">
+      <label>
+        View:
+        <select id="scopeSelect">
+          <option value="all">All Events</option>
+          <option value="camporee">Winter Camporee</option>
+          <option value="cub">Cub Event</option>
+          <option value="training">Training</option>
+        </select>
+      </label>
+
+      <label>
+        Timeframe:
+        <select id="timeSelect">
+          <option value="latest">Latest survey</option>
+          <option value="12m">Last 12 months</option>
+          <option value="all">All time</option>
+        </select>
+      </label>
+
+      <button id="refreshBtn" type="button">Refresh</button>
+    </div>
+
+    <div id="errorBox" class="error"></div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- KPI tiles -->
+    <section class="grid" aria-label="Key metrics">
+      <div class="card span-3">
+        <div class="stat">
+          <div>
+            <div class="big" id="kpiResponses">—</div>
+            <div class="label">Survey responses</div>
+          </div>
+          <div class="badge" id="kpiResponsesNote">—</div>
+        </div>
+      </div>
+
+      <div class="card span-3">
+        <div class="stat">
+          <div>
+            <div class="big" id="kpiOverall">—</div>
+            <div class="label">Overall satisfaction</div>
+          </div>
+          <div class="badge">Avg (1–5)</div>
+        </div>
+      </div>
+
+      <div class="card span-3">
+        <div class="stat">
+          <div>
+            <div class="big" id="kpiReturn">—</div>
+            <div class="label">Likelihood to attend again</div>
+          </div>
+          <div class="badge">Avg (1–5)</div>
+        </div>
+      </div>
+
+      <div class="card span-3">
+        <div class="stat">
+          <div>
+            <div class="big" id="kpiTop">—</div>
+            <div class="label">Top improvement area</div>
+          </div>
+          <div class="badge">Most selected</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid" aria-label="Charts">
+      <div class="card span-6">
+        <h2>Overall Satisfaction</h2>
+        <p class="muted">Distribution of ratings (1–5).</p>
+        <div class="chartwrap"><canvas id="chartSatisfaction"></canvas></div>
+      </div>
+
+      <div class="card span-6">
+        <h2>Likelihood to Attend Again</h2>
+        <p class="muted">Distribution of ratings (1–5).</p>
+        <div class="chartwrap"><canvas id="chartReturn"></canvas></div>
+      </div>
+
+      <div class="card span-12">
+        <h2>Food Service: Start / Stop / Continue</h2>
+        <p class="muted">Counts by category across key meal factors.</p>
+        <div class="chartwrap" style="height:340px"><canvas id="chartSSC"></canvas></div>
+      </div>
+
+      <div class="card span-12">
+        <h2>Action Queue</h2>
+        <p class="muted">Auto-generated “what to fix next” list from survey trends (editable later).</p>
+        <ul id="actionList" style="margin:10px 0 0; padding-left: 18px; color: var(--gray);"></ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  /**
+   * DASHBOARD DATA SOURCE
+   * Replace this with your real JSON endpoint later.
+   * For GitHub Pages, easiest path is:
+   *   /data/dashboard.json
+   */
+  const DATA_URL = "./data/dashboard.json";
+
+  let charts = {};
+
+  const el = (id) => document.getElementById(id);
+
+  function setStatus(ok, message){
+    el("statusText").textContent = message;
+    const dot = document.querySelector(".dot");
+    dot.style.background = ok ? "#22c55e" : "#ef4444";
+    dot.style.boxShadow = ok ? "0 0 0 3px rgba(34,197,94,.18)" : "0 0 0 3px rgba(239,68,68,.18)";
+  }
+
+  function showError(msg){
+    const box = el("errorBox");
+    box.style.display = "block";
+    box.textContent = msg;
+    setStatus(false, "Data: error");
+  }
+  function clearError(){
+    const box = el("errorBox");
+    box.style.display = "none";
+    box.textContent = "";
+  }
+
+  function destroyCharts(){
+    Object.values(charts).forEach(c => c?.destroy?.());
+    charts = {};
+  }
+
+  function makeBarChart(canvasId, labels, data, title){
+    const ctx = el(canvasId);
+    return new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{ label: title, data }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  function makeStackedBar(canvasId, labels, series){
+    const ctx = el(canvasId);
+    return new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: series.map(s => ({ label: s.label, data: s.data }))
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { tooltip: { enabled: true } },
+        scales: {
+          x: { stacked: true },
+          y: { stacked: true, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  function renderKPIs(kpi){
+    el("kpiResponses").textContent = kpi.responses ?? "—";
+    el("kpiResponsesNote").textContent = kpi.scopeLabel ?? "—";
+    el("kpiOverall").textContent = (kpi.overall_avg ?? "—");
+    el("kpiReturn").textContent = (kpi.return_avg ?? "—");
+    el("kpiTop").textContent = (kpi.top_improvement ?? "—");
+  }
+
+  function renderActions(actions){
+    const ul = el("actionList");
+    ul.innerHTML = "";
+    (actions || []).slice(0, 8).forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    if(!actions || actions.length === 0){
+      const li = document.createElement("li");
+      li.textContent = "No action items found in dataset yet.";
+      ul.appendChild(li);
+    }
+  }
+
+  function renderCharts(payload){
+    destroyCharts();
+
+    charts.satisfaction = makeBarChart(
+      "chartSatisfaction",
+      payload.satisfaction.labels,
+      payload.satisfaction.counts,
+      "Ratings"
+    );
+
+    charts.returning = makeBarChart(
+      "chartReturn",
+      payload.return_likelihood.labels,
+      payload.return_likelihood.counts,
+      "Ratings"
+    );
+
+    charts.ssc = makeStackedBar(
+      "chartSSC",
+      payload.ssc.labels,
+      payload.ssc.series
+    );
+  }
+
+  function applyFilters(raw){
+    const scope = el("scopeSelect").value;
+    const time = el("timeSelect").value;
+
+    // v1: assumes your JSON already includes pre-aggregated views by filter keys
+    // raw.views[scope][time] => { kpi, satisfaction, return_likelihood, ssc, actions }
+    const view = raw?.views?.[scope]?.[time];
+
+    if(!view){
+      throw new Error("No matching dataset view found for the selected filters.");
+    }
+    return view;
+  }
+
+  async function load(){
+    clearError();
+    setStatus(true, "Data: loading…");
+
+    try{
+      const res = await fetch(DATA_URL, { cache: "no-store" });
+      if(!res.ok) throw new Error(`Fetch failed (${res.status})`);
+      const raw = await res.json();
+
+      const view = applyFilters(raw);
+
+      el("lastUpdated").textContent = raw.last_updated || "—";
+      renderKPIs(view.kpi);
+      renderCharts(view);
+      renderActions(view.actions);
+
+      setStatus(true, "Data: loaded");
+    }catch(err){
+      console.error(err);
+      showError(`Dashboard failed to load data. ${err.message}`);
+    }
+  }
+
+  el("refreshBtn").addEventListener("click", load);
+  el("scopeSelect").addEventListener("change", load);
+  el("timeSelect").addEventListener("change", load);
+
+  load();
+</script>
+</body>
+</html>
