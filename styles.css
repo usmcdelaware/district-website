@@ -213,3 +213,70 @@ p{ line-height: 1.55; }
   .grid{ grid-template-columns: 1fr; }
 }
 
+/* =====================================================
+   SHARED SITE HEADER (MERGED – SAFE OVERRIDES ONLY)
+   ===================================================== */
+
+/* Scope EVERYTHING to .site-header so nothing else changes */
+.site-header{
+  background: #003F87;
+  border-bottom: 4px solid #CE1126;
+  color: #ffffff;
+}
+
+/* Header layout */
+.site-header .header-inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0 18px;
+}
+
+/* Brand (logo + text) */
+.site-header .brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 700;
+}
+
+/* Logo – FIXED SIZE so global img rules can't break it */
+.site-header .brand-logo{
+  height: 42px;
+  width: auto;
+  max-width: none;
+  display: block;
+}
+
+/* Brand text */
+.site-header .brand-text{
+  white-space: nowrap;
+}
+
+/* Navigation */
+.site-header .nav{
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.site-header .nav a{
+  color: #ffffff;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+}
+
+.site-header .nav a:hover{
+  filter: brightness(1.08);
+}
+
+.site-header .nav a[aria-current="page"]{
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
