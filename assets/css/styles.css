@@ -219,3 +219,51 @@ html{
 button, .button, .btn, .nav a{
   min-height: 44px; /* Apple recommended tap target */
 }
+
+/* =========================
+   iPHONE FIXES – DASHBOARD
+   ========================= */
+
+.dashboard-header select,
+.dashboard-header button {
+  font-size: 16px;          /* prevents iOS zoom */
+  min-height: 44px;         /* Apple tap target */
+}
+
+.dashboard-header .controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* Mobile layout */
+@media (max-width: 720px) {
+  .dashboard-header .dashbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard-header .pillrow {
+    justify-content: flex-start;
+  }
+
+  .dashboard-header .controls {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .dashboard-header .controls label {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dashboard-header .controls select {
+    width: 60%;
+    max-width: 260px;
+  }
+
+  .dashboard-header #refreshBtn {
+    width: 100%;
+  }
+}
