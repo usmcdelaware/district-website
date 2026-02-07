@@ -206,3 +206,16 @@ p{margin:0 0 10px;color:var(--gray)}
     font-size: 1rem;
   }
 }
+
+.calendar-container{
+  height: calc(100dvh - 96px); /* iOS-friendly dynamic viewport */
+  height: calc(100vh - 96px);  /* fallback */
+}
+
+html{
+  -webkit-text-size-adjust: 100%; /* prevents iOS auto-zooming text */
+}
+
+button, .button, .btn, .nav a{
+  min-height: 44px; /* Apple recommended tap target */
+}
