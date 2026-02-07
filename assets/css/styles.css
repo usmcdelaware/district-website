@@ -267,3 +267,22 @@ button, .button, .btn, .nav a{
     width: 100%;
   }
 }
+
+/* Fallback block (hidden by default) */
+.calendar-fallback{
+  display:none;
+  padding: 18px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.calendar-title{
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+/* On iPhones, prefer the fallback */
+@media (max-width: 720px){
+  .calendar-fallback{ display:block; }
+  .calendar-frame{ display:none; }
+}

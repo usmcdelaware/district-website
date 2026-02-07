@@ -56,14 +56,31 @@ html, body {
 
   <!-- CALENDAR -->
   <main class="calendar-container">
-    <iframe
-      class="calendar-frame"
-      src="https://www.sccbsa.org/calendar/district/572/Sagtikos"
-      loading="lazy"
-      referrerpolicy="no-referrer"
-      title="Sagtikos District Calendar"
-    ></iframe>
-  </main>
+  <!-- iPhone fallback message/button -->
+  <div class="calendar-fallback" id="calendarFallback">
+    <h1 class="calendar-title">Sagtikos District Calendar</h1>
+    <p class="muted">
+      If the calendar doesn’t load on iPhone, tap below to open it directly.
+    </p>
+    <a class="button accent"
+       href="https://www.sccbsa.org/calendar/district/572/Sagtikos"
+       target="_blank"
+       rel="noopener">
+      Open Calendar
+    </a>
+  </div>
+
+  <!-- Desktop iframe (still used on computers and many Android devices) -->
+  <iframe
+    class="calendar-frame"
+    id="calendarFrame"
+    src="https://www.sccbsa.org/calendar/district/572/Sagtikos"
+    loading="lazy"
+    referrerpolicy="no-referrer"
+    title="Sagtikos District Calendar"
+  ></iframe>
+</main>
+
 <script>
   function setVh() {
     const vh = window.innerHeight * 0.01;
@@ -72,6 +89,15 @@ html, body {
 
   setVh();
   window.addEventListener('resize', setVh);
+</script>
+<script>
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (isIOS) {
+    document.getElementById('calendarFallback').style.display = 'block';
+    document.getElementById('calendarFrame').style.display = 'none';
+  }
 </script>
 
 </body>
