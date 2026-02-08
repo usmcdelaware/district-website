@@ -40,18 +40,63 @@
       <h1>Contact</h1>
 
       <section class="grid">
-        <div class="card span-6">
-          <h2 style="margin:0 0 8px;color:var(--green)">Roundtable</h2>
-          <p>Best place to connect with district leadership and other unit leaders.</p>
-          <a class="btn" href="calendar.html">Roundtable dates</a>
-        </div>
+  <div class="card span-6">
+    <h2 style="margin:0 0 8px;color:var(--green)">Roundtable</h2>
+    <p>Best place to connect with district leadership and other unit leaders.</p>
+    <a class="btn" href="calendar.html">Roundtable dates</a>
+  </div>
 
-        <div class="card span-6">
-          <h2 style="margin:0 0 8px;color:var(--green)">Email</h2>
-          <p>Add your district contact method here (or link to a council contact page).</p>
-          <p><em>Tip: use a role address like <strong>program@yourdomain</strong> if you set up Zoho later.</em></p>
-        </div>
-      </section>
+  <div class="card span-6">
+    <h2 style="margin:0 0 8px;color:var(--green)">Email</h2>
+    <p>Add your district contact method here (or link to a council contact page).</p>
+    <p><em>Tip: use a role address like <strong>program@yourdomain</strong> if you set up Zoho later.</em></p>
+
+    <!-- Optional: make it real now -->
+    <!-- <p><a class="btn" href="mailto:program@sagtikosdistrict.org">Email Program Team</a></p> -->
+  </div>
+
+  <div class="card span-12">
+    <h2 style="margin:0 0 8px;color:var(--green)">Message Us</h2>
+    <p style="margin-top:0">Send a note to the district program team. Please allow 24–48 hours for a reply.</p>
+
+    <form action="https://formspree.io/f/XXXXXXXX" method="POST" class="contact-form">
+      <div class="contact-row">
+        <label class="contact-field">
+          <span>Name</span>
+          <input type="text" name="name" autocomplete="name" required>
+        </label>
+
+        <label class="contact-field">
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="email" required>
+        </label>
+      </div>
+
+      <label class="contact-field">
+        <span>Subject</span>
+        <select name="subject">
+          <option value="General">General</option>
+          <option value="Event">District Event</option>
+          <option value="Training">Training</option>
+          <option value="Volunteer">Volunteering</option>
+          <option value="Website">Website</option>
+        </select>
+      </label>
+
+      <label class="contact-field">
+        <span>Message</span>
+        <textarea name="message" rows="6" required></textarea>
+      </label>
+
+      <!-- Helpful for Formspree routing + spam reduction -->
+      <input type="hidden" name="_subject" value="Sagtikos District Contact Form Submission">
+      <input type="text" name="_gotcha" style="display:none">
+
+      <button class="btn" type="submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
 
       <div class="footer">© <a href="https://www.scouting.org">Scouting America</a> • <a href="https://www.sccbsa.org">Suffolk County Council</a></div>
     </div>

@@ -286,3 +286,46 @@ button, .button, .btn, .nav a{
   .calendar-fallback{ display:block; }
   .calendar-frame{ display:none; }
 }
+
+/* Contact form - styled to match existing cards/buttons */
+.contact-form {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.contact-field span {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: var(--muted, #515354);
+}
+
+.contact-field input,
+.contact-field textarea,
+.contact-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.contact-field textarea {
+  resize: vertical;
+}
+
+/* Mobile: stack name/email */
+@media (max-width: 720px) {
+  .contact-row {
+    grid-template-columns: 1fr;
+  }
+}
