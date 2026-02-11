@@ -7,11 +7,20 @@
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="apple-touch-icon" href="assets/img/favicon.png">
   <link rel="stylesheet" href="assets/css/styles.css">
+
+  <style>
+    details summary { user-select: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary:before { content: "▸"; display: inline-block; margin-right: 8px; transform: translateY(-1px); }
+    details[open] summary:before { content: "▾"; }
+  </style>
 </head>
+
 <body>
-    <header class="site-header">
+
+<header class="site-header">
   <div class="container header-inner">
-    
+
     <!-- Brand: logo + title -->
     <a class="brand" href="index.html">
       <img
@@ -27,40 +36,245 @@
       <a href="index.html">Home</a>
       <a href="calendar.html">Calendar</a>
       <a href="dashboard.html">Dashboard</a>
-      <a href="resources.html">Resources</a>
+      <a href="resources.html" aria-current="page">Resources</a>
       <a href="contact.html">Contact</a>
     </nav>
 
   </div>
 </header>
 
-  <main>
-    <div class="wrap">
-      <h1>Resources</h1>
-      <p>Forms, guides, and links used by unit leaders and event staff.</p>
+<main>
+  <div class="wrap">
+    <h1>Resources</h1>
+    <p>Forms, guides, and links used by unit leaders and event staff.</p>
 
-      <section class="grid">
-        <div class="card span-4">
-          <h2 style="margin:0 0 8px;color:var(--green)">Leader Guides</h2>
-          <p>PDF leader guides for district events (when posted).</p>
-          <p><em>Drop PDFs into <code>assets/docs/</code> and link here.</em></p>
-        </div>
+    <section class="grid" id="resourcesGrid">
+      <!-- Auto-generated from Google Drive -->
+      <div class="card span-4">
+        <h2 style="margin:0 0 8px;color:var(--green)">Loading…</h2>
+        <p>Please wait while resources load from Google Drive.</p>
+      </div>
+    </section>
 
-        <div class="card span-4">
-          <h2 style="margin:0 0 8px;color:var(--green)">Training</h2>
-          <p>Training dates, roundtable reminders, and recommended online training.</p>
-          <a class="btn" href="calendar.html">Training on calendar</a>
-        </div>
+    <div class="footer">© Sagtikos District • Suffolk County Council</div>
+  </div>
+</main>
 
-        <div class="card span-4">
-          <h2 style="margin:0 0 8px;color:var(--green)">Surveys</h2>
-          <p>Event feedback surveys and results.</p>
-          <a class="btn alt" href="dashboard.html">View dashboard</a>
-        </div>
-      </section>
+<script>
+  const FEED_URL = "https://script.google.com/macros/s/AKfycbwDlIINtfbU2E_L36oT3cdP-46Za9Q_BX-EqpmAHY8cuaniPHpkAm5ZV4I7tIl_rp8w/exec";
 
-      <div class="footer">© Sagtikos District • Suffolk County Council</div>
-    </div>
-  </main>
+  const TYPE_META = {
+    pdf:    { icon: "📄", label: "PDF" },
+    doc:    { icon: "📝", label: "Doc" },
+    sheet:  { icon: "📊", label: "Sheet" },
+    slides: { icon: "📽️", label: "Slides" },
+    form:   { icon: "🧾", label: "Form" },
+    drawing:{ icon: "🎨", label: "Drawing" },
+    image:  { icon: "🖼️", label: "Image" },
+    video:  { icon: "🎬", label: "Video" },
+    audio:  { icon: "🎧", label: "Audio" },
+    zip:    { icon: "🗜️", label: "ZIP" },
+    text:   { icon: "📃", label: "Text" },
+    file:   { icon: "📁", label: "File" }
+  };
+
+  function renderResources(payload) {
+    const grid = document.getElementById("resourcesGrid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    const root = payload && payload.root ? payload.root : null;
+    if (!root) {
+      grid.innerHTML = emptyCard("Resources", "No data returned from Drive feed. (Check sharing + deployment access.)");
+      return;
+    }
+
+    // Optional: files directly in root as a "General" section (still no path shown)
+    if (root.files && root.files.length) {
+      grid.appendChild(makeFolderCard({
+        name: "General",
+        files: root.files,
+        folders: []
+      }));
+    }
+
+    (root.folders || []).forEach(folderNode => {
+      grid.appendChild(makeFolderCard(folderNode));
+    });
+
+    if (!(root.folders && root.folders.length) && !(root.files && root.files.length)) {
+      grid.innerHTML = emptyCard(
+        "Resources",
+        `No files or subfolders found in "${root.name}". Create subfolders like "Leader Guides", "Forms", "Toolkit".`
+      );
+    }
+  }
+
+  function makeFolderCard(node) {
+    const card = document.createElement("div");
+    card.className = "card span-4";
+
+    const title = document.createElement("h2");
+    title.style.margin = "0 0 8px";
+    title.style.color = "var(--green)";
+    title.textContent = node.name;
+
+    card.appendChild(title);
+
+    // Files list
+    card.appendChild(renderFilesList(node.files || []));
+
+    // Nested folders (collapsible) — no path shown
+    const nested = node.folders || [];
+    if (nested.length) {
+      const details = document.createElement("details");
+      details.style.marginTop = "12px";
+
+      const summary = document.createElement("summary");
+      summary.style.cursor = "pointer";
+      summary.style.fontWeight = "700";
+      summary.textContent = `More folders (${nested.length})`;
+
+      details.appendChild(summary);
+
+      const inner = document.createElement("div");
+      inner.style.marginTop = "10px";
+      inner.style.display = "grid";
+      inner.style.gap = "12px";
+
+      nested.forEach(child => inner.appendChild(makeNestedFolderBlock(child)));
+      details.appendChild(inner);
+
+      card.appendChild(details);
+    }
+
+    return card;
+  }
+
+  function makeNestedFolderBlock(node) {
+    const wrap = document.createElement("div");
+    wrap.style.border = "1px solid rgba(0,0,0,0.10)";
+    wrap.style.borderRadius = "10px";
+    wrap.style.padding = "10px 12px";
+    wrap.style.background = "rgba(0,0,0,0.02)";
+
+    const name = document.createElement("div");
+    name.style.fontWeight = "800";
+    name.textContent = node.name;
+
+    wrap.appendChild(name);
+    wrap.appendChild(renderFilesList(node.files || []));
+
+    const nested = node.folders || [];
+    if (nested.length) {
+      const details = document.createElement("details");
+      details.style.marginTop = "10px";
+
+      const summary = document.createElement("summary");
+      summary.style.cursor = "pointer";
+      summary.style.fontWeight = "700";
+      summary.textContent = `More folders (${nested.length})`;
+
+      details.appendChild(summary);
+
+      const inner = document.createElement("div");
+      inner.style.marginTop = "10px";
+      inner.style.display = "grid";
+      inner.style.gap = "10px";
+
+      nested.forEach(child => inner.appendChild(makeNestedFolderBlock(child)));
+      details.appendChild(inner);
+
+      wrap.appendChild(details);
+    }
+
+    return wrap;
+  }
+
+  function renderFilesList(files) {
+    const container = document.createElement("div");
+    container.style.marginTop = "10px";
+
+    if (!files.length) {
+      const p = document.createElement("p");
+      p.style.margin = "10px 0 0";
+      p.style.opacity = "0.75";
+      p.innerHTML = "<em>No files in this folder yet.</em>";
+      container.appendChild(p);
+      return container;
+    }
+
+    const ul = document.createElement("ul");
+    ul.style.margin = "10px 0 0";
+    ul.style.paddingLeft = "18px";
+
+    files.forEach(f => {
+      const meta = TYPE_META[f.type] || TYPE_META.file;
+      const updated = formatUpdated(f.updatedISO);
+
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <a href="${escapeAttr(f.url)}" target="_blank" rel="noopener">
+          ${meta.icon} ${escapeHtml(f.name)}
+        </a>
+        <span style="opacity:.75; font-size:.92rem;">
+          — ${meta.label} • Updated ${updated}
+        </span>
+      `;
+      ul.appendChild(li);
+    });
+
+    container.appendChild(ul);
+    return container;
+  }
+
+  function formatUpdated(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    } catch (e) {
+      return "unknown";
+    }
+  }
+
+  function emptyCard(title, message) {
+    return `
+      <div class="card span-4">
+        <h2 style="margin:0 0 8px;color:var(--green)">${escapeHtml(title)}</h2>
+        <p>${escapeHtml(message)}</p>
+      </div>
+    `;
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, s => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[s]));
+  }
+  function escapeAttr(str) {
+    return String(str).replace(/"/g, "&quot;");
+  }
+
+  (function loadFeed() {
+    const s = document.createElement("script");
+    const joinChar = FEED_URL.includes("?") ? "&" : "?";
+    s.src = `${FEED_URL}${joinChar}callback=renderResources`;
+    s.async = true;
+
+    s.onerror = () => {
+      const grid = document.getElementById("resourcesGrid");
+      if (grid) {
+        grid.innerHTML = emptyCard(
+          "Resources",
+          "Could not load the Google Drive feed. Verify the Apps Script deployment is public and the Drive folder is shared 'Anyone with the link: Viewer'."
+        );
+      }
+    };
+
+    document.body.appendChild(s);
+  })();
+</script>
+
 </body>
 </html>
