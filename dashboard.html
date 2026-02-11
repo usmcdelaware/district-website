@@ -36,35 +36,17 @@
 
     /* Dashboard page header (NOT the site nav header) */
     .dashboard-header{
-    background: var(--blue);
-    color: white;
-    padding: 18px 18px;
-    border-bottom: 4px solid var(--red);
+      background: var(--blue);
+      color: white;
+      padding: 18px 18px;
+      border-bottom: 4px solid var(--red);
     }
 
     .dashboard-header .wrap,
-   main .wrap{
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-    .toprow{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
+    main .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
     }
-    .dashboard-header h1{
-  margin:0;
-  font-size: 1.35rem;
-  letter-spacing: .2px;
-}
-.dashboard-header .sub{
-  margin: 4px 0 0;
-  color: rgba(255,255,255,.85);
-  font-size: .95rem;
-}
 
     .pillrow{
       display:flex;
@@ -147,15 +129,14 @@
 
     /* layout spans */
     .span-3{ grid-column: span 3; }
-    .span-4{ grid-column: span 4; }
     .span-6{ grid-column: span 6; }
     .span-12{ grid-column: span 12; }
 
     @media (max-width: 980px){
-      .span-3,.span-4{ grid-column: span 6; }
+      .span-3{ grid-column: span 6; }
     }
     @media (max-width: 640px){
-      .span-3,.span-4,.span-6{ grid-column: span 12; }
+      .span-3,.span-6{ grid-column: span 12; }
       .chartwrap{ height: 260px; }
     }
 
@@ -207,306 +188,369 @@
 
 <body>
   <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html">
-      <img src="assets/img/district-logo.png" alt="Sagtikos District logo" class="brand-logo">
-      <span class="brand-text">Sagtikos District Program</span>
-    </a>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="dashboard.html" aria-current="page">Dashboard</a>
-      <a href="resources.html">Resources</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
-</header>
-
-<section class="dashboard-header">
-  <div class="wrap">
-
-    <div class="dashbar">
-      <!-- LEFT: status / updated / calendar -->
-      <div class="pillrow">
-        <div class="pill"><span class="dot"></span><span id="statusText">Data: not loaded</span></div>
-        <div class="pill"><strong>Last updated:</strong> <span id="lastUpdated">—</span></div>
-        <a class="link" href="calendar.html">View Calendar</a>
-      </div>
-
-      <!-- RIGHT: filters -->
-      <div class="controls">
-        <label>
-          View:
-          <select id="scopeSelect">
-            <option value="all">All Events</option>
-            <option value="camporee">Winter Camporee</option>
-            <option value="cub">Cub Event</option>
-            <option value="training">Training</option>
-          </select>
-        </label>
-
-        <label>
-          Timeframe:
-          <select id="timeSelect">
-            <option value="latest">Latest survey</option>
-            <option value="12m">Last 12 months</option>
-            <option value="all">All time</option>
-          </select>
-        </label>
-
-        <button id="refreshBtn" type="button">Refresh</button>
-      </div>
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/img/district-logo.png" alt="Sagtikos District logo" class="brand-logo">
+        <span class="brand-text">Sagtikos District Program</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="dashboard.html" aria-current="page">Dashboard</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <div id="errorBox" class="error"></div>
-  </div>
-</section>
+  <section class="dashboard-header">
+    <div class="wrap">
+      <div class="dashbar">
+        <!-- LEFT: status / updated / calendar -->
+        <div class="pillrow">
+          <div class="pill"><span class="dot"></span><span id="statusText">Data: not loaded</span></div>
+          <div class="pill"><strong>Last updated:</strong> <span id="lastUpdated">—</span></div>
+          <a class="link" href="calendar.html">View Calendar</a>
+        </div>
 
+        <!-- RIGHT: filters -->
+        <div class="controls">
+          <label>
+            View:
+            <select id="scopeSelect">
+              <option value="all">All Events</option>
+              <option value="camporee">Winter Camporee</option>
+              <option value="cub">Cub Event</option>
+              <option value="training">Training</option>
+            </select>
+          </label>
 
-<main>
-  <div class="wrap">
+          <label>
+            Timeframe:
+            <select id="timeSelect">
+              <option value="latest">Latest survey</option>
+              <option value="12m">Last 12 months</option>
+              <option value="all">All time</option>
+            </select>
+          </label>
 
-    <!-- KPI tiles -->
-    <section class="grid" aria-label="Key metrics">
-      <div class="card span-3">
-        <div class="stat">
-          <div>
-            <div class="big" id="kpiResponses">—</div>
-            <div class="label">Survey responses</div>
-          </div>
-          <div class="badge" id="kpiResponsesNote">—</div>
+          <button id="refreshBtn" type="button">Refresh</button>
         </div>
       </div>
 
-      <div class="card span-3">
-        <div class="stat">
-          <div>
-            <div class="big" id="kpiOverall">—</div>
-            <div class="label">Overall satisfaction</div>
+      <div id="errorBox" class="error"></div>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+      <!-- KPI tiles -->
+      <section class="grid" aria-label="Key metrics">
+        <div class="card span-3">
+          <div class="stat">
+            <div>
+              <div class="big" id="kpiResponses">—</div>
+              <div class="label">Survey responses</div>
+            </div>
+            <div class="badge" id="kpiResponsesNote">—</div>
           </div>
-          <div class="badge">Avg (1–5)</div>
         </div>
-      </div>
 
-      <div class="card span-3">
-        <div class="stat">
-          <div>
-            <div class="big" id="kpiReturn">—</div>
-            <div class="label">Likelihood to attend again</div>
+        <div class="card span-3">
+          <div class="stat">
+            <div>
+              <div class="big" id="kpiOverall">—</div>
+              <div class="label">Overall satisfaction</div>
+            </div>
+            <div class="badge">Avg (1–5)</div>
           </div>
-          <div class="badge">Avg (1–5)</div>
         </div>
-      </div>
 
-      <div class="card span-3">
-        <div class="stat">
-          <div>
-            <div class="big" id="kpiTop">—</div>
-            <div class="label">Top improvement area</div>
+        <div class="card span-3">
+          <div class="stat">
+            <div>
+              <div class="big" id="kpiReturn">—</div>
+              <div class="label">Likelihood to attend again</div>
+            </div>
+            <div class="badge">Avg (1–5)</div>
           </div>
-          <div class="badge">Most selected</div>
         </div>
-      </div>
-    </section>
 
-    <!-- Charts -->
-    <section class="grid" aria-label="Charts">
-      <div class="card span-6">
-        <h2>Overall Satisfaction</h2>
-        <p class="muted">Distribution of ratings (1–5).</p>
-        <div class="chartwrap"><canvas id="chartSatisfaction"></canvas></div>
-      </div>
+        <div class="card span-3">
+          <div class="stat">
+            <div>
+              <div class="big" id="kpiTop">—</div>
+              <div class="label">Top improvement area</div>
+            </div>
+            <div class="badge">Most selected</div>
+          </div>
+        </div>
+      </section>
 
-      <div class="card span-6">
-        <h2>Likelihood to Attend Again</h2>
-        <p class="muted">Distribution of ratings (1–5).</p>
-        <div class="chartwrap"><canvas id="chartReturn"></canvas></div>
-      </div>
+      <!-- Charts -->
+      <section class="grid" aria-label="Charts">
+        <div class="card span-6">
+          <h2>Overall Satisfaction</h2>
+          <p class="muted">Distribution of ratings (1–5).</p>
+          <div class="chartwrap"><canvas id="chartSatisfaction"></canvas></div>
+        </div>
 
-      <div class="card span-12">
-        <h2>Food Service: Start / Stop / Continue</h2>
-        <p class="muted">Counts by category across key meal factors.</p>
-        <div class="chartwrap" style="height:340px"><canvas id="chartSSC"></canvas></div>
-      </div>
+        <div class="card span-6">
+          <h2>Likelihood to Attend Again</h2>
+          <p class="muted">Distribution of ratings (1–5).</p>
+          <div class="chartwrap"><canvas id="chartReturn"></canvas></div>
+        </div>
 
-      <div class="card span-12">
-        <h2>Action Queue</h2>
-        <p class="muted">Auto-generated “what to fix next” list from survey trends (editable later).</p>
-        <ul id="actionList" style="margin:10px 0 0; padding-left: 18px; color: var(--gray);"></ul>
-      </div>
-    </section>
+        <div class="card span-12">
+          <h2>Food Service: Start / Stop / Continue</h2>
+          <p class="muted">Counts by category across key meal factors.</p>
+          <div class="chartwrap" style="height:340px"><canvas id="chartSSC"></canvas></div>
+        </div>
+      </section>
+    </div>
+  </main>
 
-  </div>
-</main>
+  <script>
+    // Published CSV from EXPORT_DASHBOARD tab
+    const DATA_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vR_WvGazSCMFQBvr8_fUo3qx3k7z_pxk5NFzj6PDuONkQUSSSzz07AP88w8O2OEhfQGxjShqepAmGkF/pub?gid=1001858834&single=true&output=csv";
 
-<script>
-  /**
-   * DASHBOARD DATA SOURCE
-   * Replace this with your real JSON endpoint later.
-   * For GitHub Pages, easiest path is:
-   *   /data/dashboard.json
-   */
-  const DATA_URL = "./data/dashboard.json";
+    let charts = {};
+    const el = (id) => document.getElementById(id);
 
-  let charts = {};
+    function setStatus(ok, message) {
+      el("statusText").textContent = message;
+      const dot = document.querySelector(".dot");
+      dot.style.background = ok ? "#22c55e" : "#ef4444";
+      dot.style.boxShadow = ok
+        ? "0 0 0 3px rgba(34,197,94,.18)"
+        : "0 0 0 3px rgba(239,68,68,.18)";
+    }
 
-  const el = (id) => document.getElementById(id);
+    function showError(msg) {
+      const box = el("errorBox");
+      box.style.display = "block";
+      box.textContent = msg;
+      setStatus(false, "Data: error");
+    }
 
-  function setStatus(ok, message){
-    el("statusText").textContent = message;
-    const dot = document.querySelector(".dot");
-    dot.style.background = ok ? "#22c55e" : "#ef4444";
-    dot.style.boxShadow = ok ? "0 0 0 3px rgba(34,197,94,.18)" : "0 0 0 3px rgba(239,68,68,.18)";
-  }
+    function clearError() {
+      const box = el("errorBox");
+      box.style.display = "none";
+      box.textContent = "";
+    }
 
-  function showError(msg){
-    const box = el("errorBox");
-    box.style.display = "block";
-    box.textContent = msg;
-    setStatus(false, "Data: error");
-  }
-  function clearError(){
-    const box = el("errorBox");
-    box.style.display = "none";
-    box.textContent = "";
-  }
+    function destroyCharts() {
+      Object.values(charts).forEach((c) => c?.destroy?.());
+      charts = {};
+    }
 
-  function destroyCharts(){
-    Object.values(charts).forEach(c => c?.destroy?.());
-    charts = {};
-  }
-
-  function makeBarChart(canvasId, labels, data, title){
-    const ctx = el(canvasId);
-    return new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels,
-        datasets: [{ label: title, data }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
+    function makeBarChart(canvasId, labels, data, title) {
+      const ctx = el(canvasId);
+      return new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{ label: title, data }],
         },
-        scales: {
-          y: { beginAtZero: true }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true },
+          },
+          scales: {
+            y: { beginAtZero: true },
+          },
+        },
+      });
+    }
+
+    function makeStackedBar(canvasId, labels, series) {
+      const ctx = el(canvasId);
+      return new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: series.map((s) => ({ label: s.label, data: s.data })),
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { tooltip: { enabled: true } },
+          scales: {
+            x: { stacked: true },
+            y: { stacked: true, beginAtZero: true },
+          },
+        },
+      });
+    }
+
+    function renderKPIs(kpi) {
+      el("kpiResponses").textContent = kpi.responses ?? "—";
+      el("kpiResponsesNote").textContent = kpi.scopeLabel ?? "—";
+      el("kpiOverall").textContent = kpi.overall_avg ?? "—";
+      el("kpiReturn").textContent = kpi.return_avg ?? "—";
+      el("kpiTop").textContent = kpi.top_improvement ?? "—";
+    }
+
+    function renderCharts(payload) {
+      destroyCharts();
+
+      charts.satisfaction = makeBarChart(
+        "chartSatisfaction",
+        payload.satisfaction.labels,
+        payload.satisfaction.counts,
+        "Ratings"
+      );
+
+      charts.returning = makeBarChart(
+        "chartReturn",
+        payload.return_likelihood.labels,
+        payload.return_likelihood.counts,
+        "Ratings"
+      );
+
+      charts.ssc = makeStackedBar("chartSSC", payload.ssc.labels, payload.ssc.series);
+    }
+
+    function applyFilters(raw) {
+      const scope = el("scopeSelect").value;
+      const time = el("timeSelect").value;
+
+      // v1 expects pre-aggregated views by keys:
+      // raw.views[scope][time] => { kpi, satisfaction, return_likelihood, ssc }
+      const view = raw?.views?.[scope]?.[time];
+      if (!view) throw new Error("No matching dataset view found for the selected filters.");
+      return view;
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [], field = "", inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i], next = text[i + 1];
+
+        if (c === '"' && inQuotes && next === '"') { field += '"'; i++; continue; }
+        if (c === '"') { inQuotes = !inQuotes; continue; }
+
+        if (c === "," && !inQuotes) { row.push(field.trim()); field = ""; continue; }
+
+        if ((c === "\n" || c === "\r") && !inQuotes) {
+          if (c === "\r" && next === "\n") continue; // CRLF
+          if (field.length || row.length) { row.push(field.trim()); rows.push(row); }
+          row = []; field = "";
+          continue;
         }
-      }
-    });
-  }
 
-  function makeStackedBar(canvasId, labels, series){
-    const ctx = el(canvasId);
-    return new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels,
-        datasets: series.map(s => ({ label: s.label, data: s.data }))
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { tooltip: { enabled: true } },
-        scales: {
-          x: { stacked: true },
-          y: { stacked: true, beginAtZero: true }
+        field += c;
+      }
+      if (field.length || row.length) { row.push(field.trim()); rows.push(row); }
+
+      return rows.filter(r => r.some(cell => (cell ?? "").trim() !== ""));
+    }
+
+    // ✅ Corrected: handles UTF-8 BOM + finds first non-empty data row
+    function csvToRaw(rows) {
+      if (rows.length < 2) throw new Error("CSV has no data rows yet.");
+
+      const header = rows[0].map(h => (h ?? "").replace(/^\uFEFF/, "").trim());
+      const data = rows.slice(1).find(r => r && r.some(cell => (cell ?? "").trim() !== ""));
+      if (!data) throw new Error("CSV has no usable data row.");
+
+      const get = (name) => {
+        const i = header.indexOf(name);
+        return i >= 0 ? (data[i] ?? "").trim() : "";
+      };
+
+      const scope = get("scope") || "all";
+      const time  = get("time")  || "latest";
+
+      const raw = { last_updated: get("last_updated") || "—", views: {} };
+      raw.views[scope] = raw.views[scope] || {};
+      raw.views[scope][time] = {
+        kpi: {
+          responses: get("responses") || "—",
+          scopeLabel: get("scopeLabel") || "—",
+          overall_avg: get("overall_avg") || "—",
+          return_avg: get("return_avg") || "—",
+          top_improvement: get("top_improvement") || "—",
+        },
+        satisfaction: {
+          labels: ["1","2","3","4","5"],
+          counts: [
+            Number(get("sat_1") || 0),
+            Number(get("sat_2") || 0),
+            Number(get("sat_3") || 0),
+            Number(get("sat_4") || 0),
+            Number(get("sat_5") || 0),
+          ]
+        },
+        return_likelihood: {
+          labels: ["1","2","3","4","5"],
+          counts: [
+            Number(get("ret_1") || 0),
+            Number(get("ret_2") || 0),
+            Number(get("ret_3") || 0),
+            Number(get("ret_4") || 0),
+            Number(get("ret_5") || 0),
+          ]
+        },
+        ssc: {
+          labels: [],
+          series: [
+            { label: "Start", data: [] },
+            { label: "Stop", data: [] },
+            { label: "Continue", data: [] },
+          ]
         }
+      };
+
+      for (let n = 1; n <= 5; n++) {
+        const factor = get(`ssc_factor_${n}`);
+        if (!factor) continue;
+        raw.views[scope][time].ssc.labels.push(factor);
+        raw.views[scope][time].ssc.series[0].data.push(Number(get(`ssc_start_${n}`) || 0));
+        raw.views[scope][time].ssc.series[1].data.push(Number(get(`ssc_stop_${n}`) || 0));
+        raw.views[scope][time].ssc.series[2].data.push(Number(get(`ssc_continue_${n}`) || 0));
       }
-    });
-  }
 
-  function renderKPIs(kpi){
-    el("kpiResponses").textContent = kpi.responses ?? "—";
-    el("kpiResponsesNote").textContent = kpi.scopeLabel ?? "—";
-    el("kpiOverall").textContent = (kpi.overall_avg ?? "—");
-    el("kpiReturn").textContent = (kpi.return_avg ?? "—");
-    el("kpiTop").textContent = (kpi.top_improvement ?? "—");
-  }
-
-  function renderActions(actions){
-    const ul = el("actionList");
-    ul.innerHTML = "";
-    (actions || []).slice(0, 8).forEach(item => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      ul.appendChild(li);
-    });
-    if(!actions || actions.length === 0){
-      const li = document.createElement("li");
-      li.textContent = "No action items found in dataset yet.";
-      ul.appendChild(li);
+      return raw;
     }
-  }
 
-  function renderCharts(payload){
-    destroyCharts();
+    async function load() {
+      clearError();
+      setStatus(true, "Data: loading…");
 
-    charts.satisfaction = makeBarChart(
-      "chartSatisfaction",
-      payload.satisfaction.labels,
-      payload.satisfaction.counts,
-      "Ratings"
-    );
+      try {
+        // cache-bust to avoid stale published CSV
+        const res = await fetch(`${DATA_URL}&_=${Date.now()}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
 
-    charts.returning = makeBarChart(
-      "chartReturn",
-      payload.return_likelihood.labels,
-      payload.return_likelihood.counts,
-      "Ratings"
-    );
+        const text = await res.text();
+        const rows = parseCSV(text);
+        const raw = csvToRaw(rows);
 
-    charts.ssc = makeStackedBar(
-      "chartSSC",
-      payload.ssc.labels,
-      payload.ssc.series
-    );
-  }
+        const view = applyFilters(raw);
 
-  function applyFilters(raw){
-    const scope = el("scopeSelect").value;
-    const time = el("timeSelect").value;
+        el("lastUpdated").textContent = raw.last_updated || "—";
+        renderKPIs(view.kpi);
+        renderCharts(view);
 
-    // v1: assumes your JSON already includes pre-aggregated views by filter keys
-    // raw.views[scope][time] => { kpi, satisfaction, return_likelihood, ssc, actions }
-    const view = raw?.views?.[scope]?.[time];
-
-    if(!view){
-      throw new Error("No matching dataset view found for the selected filters.");
+        setStatus(true, "Data: loaded");
+      } catch (err) {
+        console.error(err);
+        showError(`Dashboard failed to load data. ${err.message}`);
+      }
     }
-    return view;
-  }
 
-  async function load(){
-    clearError();
-    setStatus(true, "Data: loading…");
+    el("refreshBtn").addEventListener("click", load);
+    el("scopeSelect").addEventListener("change", load);
+    el("timeSelect").addEventListener("change", load);
 
-    try{
-      const res = await fetch(DATA_URL, { cache: "no-store" });
-      if(!res.ok) throw new Error(`Fetch failed (${res.status})`);
-      const raw = await res.json();
-
-      const view = applyFilters(raw);
-
-      el("lastUpdated").textContent = raw.last_updated || "—";
-      renderKPIs(view.kpi);
-      renderCharts(view);
-      renderActions(view.actions);
-
-      setStatus(true, "Data: loaded");
-    }catch(err){
-      console.error(err);
-      showError(`Dashboard failed to load data. ${err.message}`);
-    }
-  }
-
-  el("refreshBtn").addEventListener("click", load);
-  el("scopeSelect").addEventListener("change", load);
-  el("timeSelect").addEventListener("change", load);
-
-  load();
-</script>
+    load();
+  </script>
 </body>
 </html>
