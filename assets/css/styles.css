@@ -329,3 +329,17 @@ button, .button, .btn, .nav a{
     grid-template-columns: 1fr;
   }
 }
+
+ /* KPI state styling */
+  .card.kpi-good { border-left: 6px solid #22c55e; }
+  .card.kpi-warn { border-left: 6px solid #f59e0b; }
+  .card.kpi-bad  { border-left: 6px solid #ef4444; }
+
+  .badge.kpi-good { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.30); color: #166534; }
+  .badge.kpi-warn { background: rgba(245,158,11,.14); border-color: rgba(245,158,11,.35); color: #92400e; }
+  .badge.kpi-bad  { background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.30); color: #991b1b; }
+
+  /* subtle highlight on the big number */
+  .big.kpi-good { color: #166534; }
+  .big.kpi-warn { color: #92400e; }
+  .big.kpi-bad  { color: #991b1b; }

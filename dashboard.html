@@ -183,6 +183,36 @@
       color: #7f1d1d;
       display:none;
     }
+
+    /* Top improvement KPI styling */
+#kpiTop {
+  font-size: 1.00rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+  margin-top: 4px;
+
+  white-space: normal;
+  word-break: break-word;
+}
+
+
+    /* =========================
+       KPI COLOR CODING (NEW)
+       ========================= */
+    .card.kpi-good { border-left: 6px solid #22c55e; }
+    .card.kpi-warn { border-left: 6px solid #f59e0b; }
+    .card.kpi-bad  { border-left: 6px solid #ef4444; }
+
+    .badge.kpi-good { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.30); color: #166534; }
+    .badge.kpi-warn { background: rgba(245,158,11,.14); border-color: rgba(245,158,11,.35); color: #92400e; }
+    .badge.kpi-bad  { background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.30); color: #991b1b; }
+
+    .big.kpi-good { color: #166534; }
+    .big.kpi-warn { color: #92400e; }
+    .big.kpi-bad  { color: #991b1b; }
+
+    
   </style>
 </head>
 
@@ -246,7 +276,7 @@
     <div class="wrap">
       <!-- KPI tiles -->
       <section class="grid" aria-label="Key metrics">
-        <div class="card span-3">
+        <div class="card span-3" id="cardResponses">
           <div class="stat">
             <div>
               <div class="big" id="kpiResponses">—</div>
@@ -256,30 +286,30 @@
           </div>
         </div>
 
-        <div class="card span-3">
+        <div class="card span-3" id="cardOverall">
           <div class="stat">
             <div>
               <div class="big" id="kpiOverall">—</div>
               <div class="label">Overall satisfaction</div>
             </div>
-            <div class="badge">Avg (1–5)</div>
+            <div class="badge" id="badgeOverall">Avg (1–5)</div>
           </div>
         </div>
 
-        <div class="card span-3">
+        <div class="card span-3" id="cardReturn">
           <div class="stat">
             <div>
               <div class="big" id="kpiReturn">—</div>
               <div class="label">Likelihood to attend again</div>
             </div>
-            <div class="badge">Avg (1–5)</div>
+            <div class="badge" id="badgeReturn">Avg (1–5)</div>
           </div>
         </div>
 
-        <div class="card span-3">
+        <div class="card span-3" id="cardTop">
           <div class="stat">
             <div>
-              <div class="big" id="kpiTop">—</div>
+              <div id="kpiTop">—</div>
               <div class="label">Top improvement area</div>
             </div>
             <div class="badge">Most selected</div>
@@ -387,12 +417,61 @@
       });
     }
 
+    /* =========================
+       KPI COLOR CODING (NEW)
+       ========================= */
+    function clearKpiClasses(node){
+      node?.classList?.remove("kpi-good","kpi-warn","kpi-bad");
+    }
+
+    function setKpiState(cardId, bigId, badgeId, state){
+      const card = el(cardId);
+      const big  = el(bigId);
+      const badge = badgeId ? el(badgeId) : null;
+
+      [card,big,badge].forEach(clearKpiClasses);
+
+      if (!state) return;
+      card?.classList?.add(`kpi-${state}`);
+      big?.classList?.add(`kpi-${state}`);
+      badge?.classList?.add(`kpi-${state}`);
+    }
+
+    function avgState(v){
+      // thresholds you can tune:
+      // 4.3+ good, 3.8-4.29 warn, <3.8 bad
+      if (!isFinite(v)) return null;
+      if (v >= 4.3) return "good";
+      if (v >= 3.8) return "warn";
+      return "bad";
+    }
+
+    function responsesState(n){
+      // simple default: 15+ good, 8-14 warn, <8 bad
+      if (!isFinite(n)) return null;
+      if (n >= 15) return "good";
+      if (n >= 8) return "warn";
+      return "bad";
+    }
+
     function renderKPIs(kpi) {
+      const responses = Number(kpi.responses);
+      const overall   = Number(kpi.overall_avg);
+      const ret       = Number(kpi.return_avg);
+
       el("kpiResponses").textContent = kpi.responses ?? "—";
       el("kpiResponsesNote").textContent = kpi.scopeLabel ?? "—";
       el("kpiOverall").textContent = kpi.overall_avg ?? "—";
       el("kpiReturn").textContent = kpi.return_avg ?? "—";
       el("kpiTop").textContent = kpi.top_improvement ?? "—";
+
+      // KPI coloring
+      setKpiState("cardResponses","kpiResponses","kpiResponsesNote", responsesState(responses));
+      setKpiState("cardOverall","kpiOverall","badgeOverall", avgState(overall));
+      setKpiState("cardReturn","kpiReturn","badgeReturn", avgState(ret));
+
+      // Top improvement: neutral
+      setKpiState("cardTop","kpiTop",null,null);
     }
 
     function renderCharts(payload) {
@@ -415,15 +494,27 @@
       charts.ssc = makeStackedBar("chartSSC", payload.ssc.labels, payload.ssc.series);
     }
 
+    /* =========================
+       FILTER HARDENING (NEW)
+       - auto-fallback to first available view
+       ========================= */
     function applyFilters(raw) {
       const scope = el("scopeSelect").value;
       const time = el("timeSelect").value;
 
-      // v1 expects pre-aggregated views by keys:
-      // raw.views[scope][time] => { kpi, satisfaction, return_likelihood, ssc }
-      const view = raw?.views?.[scope]?.[time];
-      if (!view) throw new Error("No matching dataset view found for the selected filters.");
-      return view;
+      const exact = raw?.views?.[scope]?.[time];
+      if (exact) return exact;
+
+      const scopes = Object.keys(raw.views || {});
+      const firstScope = scopes[0];
+      const times = Object.keys((raw.views[firstScope] || {}));
+      const firstTime = times[0];
+
+      // keep UI honest
+      if (firstScope) el("scopeSelect").value = firstScope;
+      if (firstTime) el("timeSelect").value = firstTime;
+
+      return raw.views[firstScope][firstTime];
     }
 
     function parseCSV(text) {
@@ -517,6 +608,12 @@
         raw.views[scope][time].ssc.series[2].data.push(Number(get(`ssc_continue_${n}`) || 0));
       }
 
+      // NEW: avoid empty SSC chart weirdness
+      if (raw.views[scope][time].ssc.labels.length === 0) {
+        raw.views[scope][time].ssc.labels = ["No SSC data"];
+        raw.views[scope][time].ssc.series.forEach(s => s.data = [0]);
+      }
+
       return raw;
     }
 
@@ -525,8 +622,17 @@
       setStatus(true, "Data: loading…");
 
       try {
+        // NEW: fetch timeout hardening
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 12000);
+
         // cache-bust to avoid stale published CSV
-        const res = await fetch(`${DATA_URL}&_=${Date.now()}`, { cache: "no-store" });
+        const res = await fetch(`${DATA_URL}&_=${Date.now()}`, {
+          cache: "no-store",
+          signal: controller.signal
+        });
+        clearTimeout(t);
+
         if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
 
         const text = await res.text();
@@ -542,7 +648,7 @@
         setStatus(true, "Data: loaded");
       } catch (err) {
         console.error(err);
-        showError(`Dashboard failed to load data. ${err.message}`);
+        showError(`Dashboard failed to load data. ${err.name === "AbortError" ? "Request timed out." : err.message}`);
       }
     }
 
@@ -554,3 +660,4 @@
   </script>
 </body>
 </html>
+
