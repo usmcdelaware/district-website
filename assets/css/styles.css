@@ -343,3 +343,16 @@ button, .button, .btn, .nav a{
   .big.kpi-good { color: #166534; }
   .big.kpi-warn { color: #92400e; }
   .big.kpi-bad  { color: #991b1b; }
+
+  .important-links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+@media (max-width: 720px) {
+  .important-links-grid {
+    grid-template-columns: 1fr;
+  }
+}
